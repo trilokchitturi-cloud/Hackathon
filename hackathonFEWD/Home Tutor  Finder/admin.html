@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal - TutorFinder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <a href="index.html" class="brand">🎓 TutorFinder <span class="badge badge-primary" style="margin-left: 0.5rem;">Admin</span></a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Live Site</a>
+      <a href="user.html" class="nav-link">User View</a>
+      <a href="admin.html" class="nav-link active">Admin Dashboard</a>
+      <button class="btn btn-outline btn-sm" onclick="location.href='index.html'">Exit</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;">Platform Administration</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Audit background verifications, oversee bookings, and moderate tutor profiles.</p>
+
+    <!-- Admin KPI Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Total Tutors Registered</span>
+        <div class="stat-num" id="adminTutorCount">5</div>
+      </div>
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Active Bookings</span>
+        <div class="stat-num" id="adminBookingsCount" style="color: var(--primary);">2</div>
+      </div>
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Background Verifications</span>
+        <div class="stat-num" style="color: var(--success);">100%</div>
+      </div>
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Gross Revenue</span>
+        <div class="stat-num" style="color: #059669;">₹18,200</div>
+      </div>
+    </div>
+
+    <!-- Booking Requests Management -->
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">All Student Session Bookings</h2>
+    <div style="overflow-x: auto; margin-bottom: 3rem;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Student</th>
+            <th>Tutor</th>
+            <th>Subject</th>
+            <th>Date & Time</th>
+            <th>Fee</th>
+            <th>Status</th>
+            <th>Admin Action</th>
+          </tr>
+        </thead>
+        <tbody id="adminBookingsBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Tutors Management -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 700;">Registered Tutors & Verification</h2>
+      <button class="btn btn-primary btn-sm" onclick="addNewTutorDemo()">+ Add New Demo Tutor</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tutor Name</th>
+            <th>Qualification</th>
+            <th>City</th>
+            <th>Subjects</th>
+            <th>Hourly Rate</th>
+            <th>Badge Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adminTutorsBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    function renderAdminData() {
+      const tutors = JSON.parse(localStorage.getItem('htf_tutors') || '[]');
+      const bookings = JSON.parse(localStorage.getItem('htf_bookings') || '[]');
+
+      document.getElementById('adminTutorCount').innerText = tutors.length;
+      document.getElementById('adminBookingsCount').innerText = bookings.length;
+
+      // Render Bookings
+      const bBody = document.getElementById('adminBookingsBody');
+      bBody.innerHTML = '';
+      if (bookings.length === 0) {
+        bBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No bookings found in the system.</td></tr>`;
+      } else {
+        bookings.forEach(b => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${b.id}</strong></td>
+            <td>${b.studentName}</td>
+            <td>${b.tutorName}</td>
+            <td>${b.subject} (${b.mode})</td>
+            <td>${b.date} - ${b.time}</td>
+            <td>₹${b.rate}</td>
+            <td><span class="badge ${b.status === 'Confirmed' ? 'badge-success' : 'badge-warning'}">${b.status}</span></td>
+            <td>
+              ${b.status !== 'Confirmed' ? `<button class="btn btn-success btn-sm" onclick="updateBookingStatus('${b.id}', 'Confirmed')">Approve</button>` : ''}
+              <button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Delete</button>
+            </td>
+          `;
+          bBody.appendChild(tr);
+        });
+      }
+
+      // Render Tutors
+      const tBody = document.getElementById('adminTutorsBody');
+      tBody.innerHTML = '';
+      tutors.forEach(t => {
+        const tr = document.createElement('tr');
+        tr

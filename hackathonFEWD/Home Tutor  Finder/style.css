@@ -1,0 +1,432 @@
+
+/* ==============================
+   TUTORFINDER - PROFESSIONAL UI
+================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #315efb;
+    --primary-dark: #2348d8;
+    --background: #f7f9fc;
+    --surface: #ffffff;
+    --text: #172033;
+    --text-muted: #718096;
+    --border: #e8edf4;
+    --success: #16a36a;
+    --radius: 14px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* NAVIGATION */
+
+.navbar {
+    height: 76px;
+    padding: 0 7%;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -1px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    transition: 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+/* BUTTONS */
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 22px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(49, 94, 251, 0.15);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: white;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-sm {
+    padding: 9px 17px;
+    font-size: 13px;
+}
+
+/* HERO SECTION */
+
+.hero {
+    text-align: center;
+    padding: 85px 20px 55px;
+    background: linear-gradient(180deg, #edf3ff 0%, #f7f9fc 100%);
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-primary {
+    background: #dfe9ff;
+    color: var(--primary);
+}
+
+.hero h1 {
+    max-width: 780px;
+    margin: 18px auto;
+    font-size: clamp(34px, 5vw, 55px);
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    color: var(--primary);
+}
+
+.hero p {
+    max-width: 620px;
+    margin: 0 auto;
+    color: var(--text-muted);
+    font-size: 16px;
+}
+
+/* SEARCH SECTION */
+
+.search-card {
+    max-width: 1100px;
+    margin: 0 auto 55px;
+    padding: 17px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 1.3fr 1.2fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 0 12px 35px rgba(30, 50, 90, 0.07);
+    position: relative;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px;
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.input-box span {
+    font-size: 17px;
+}
+
+.input-box input,
+.input-box select {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+}
+
+.input-box input::placeholder {
+    color: #9aa6b7;
+}
+
+/* MAIN CONTENT */
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 25px 70px;
+}
+
+.container h2 {
+    color: var(--text);
+    font-size: 22px;
+    letter-spacing: -0.5px;
+}
+
+/* SUBJECT FILTERS */
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    margin-bottom: 35px;
+}
+
+.chip {
+    padding: 9px 19px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    background: white;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.chip:hover,
+.chip.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* TUTOR GRID */
+
+.tutor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 23px;
+    margin-top: 25px;
+}
+
+/* TUTOR CARDS */
+
+.tutor-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: 0.25s;
+}
+
+.tutor-card:hover {
+    transform: translateY(-5px);
+    border-color: #c8d6ff;
+    box-shadow: 0 12px 30px rgba(40, 65, 120, 0.09);
+}
+
+.tutor-card img {
+    width: 68px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.tutor-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 12px 0 3px;
+}
+
+.tutor-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 7px;
+}
+
+.tutor-card .btn {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* MODAL */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 570px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    padding: 32px;
+    border-radius: 18px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.modal-content h2 {
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    border: none;
+    background: none;
+    font-size: 27px;
+    color: #64748b;
+}
+
+.form-group {
+    margin-top: 17px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    background: #fafbff;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(49, 94, 251, 0.1);
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 900px) {
+    .search-card {
+        margin: 0 20px 40px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tutor-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-links {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        height: auto;
+        padding: 17px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 13px;
+    }
+
+    .hero {
+        padding: 60px 18px 40px;
+    }
+
+    .hero h1 {
+        letter-spacing: -1px;
+    }
+
+    .search-card {
+        grid-template-columns: 1fr;
+        margin: 0 15px 35px;
+    }
+
+    .tutor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 0 16px 50px;
+    }
+
+    .modal-content {
+        padding: 25px 18px;
+    }
+}

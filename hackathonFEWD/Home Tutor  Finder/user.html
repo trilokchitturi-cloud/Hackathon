@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard - TutorFinder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <a href="index.html" class="brand">🎓 TutorFinder</a>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Find Tutors</a>
+      <a href="user.html" class="nav-link active">My Dashboard</a>
+      <a href="admin.html" class="nav-link">Admin Portal</a>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Welcome Header -->
+    <div style="background: #fff; padding: 1.75rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="font-size: 1.6rem; font-weight: 800;">Welcome, <span id="userName">Student</span>!</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Track and manage your upcoming home and online tutoring classes.</p>
+      </div>
+      <a href="index.html" class="btn btn-primary">+ Book Another Tutor</a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Active Bookings</span>
+        <div class="stat-num" id="totalBookingsCount">0</div>
+      </div>
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Hours Completed</span>
+        <div class="stat-num" style="color: var(--success);">14 hrs</div>
+      </div>
+      <div class="stat-card">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Verified Tutors Connected</span>
+        <div class="stat-num" style="color: var(--warning);">3</div>
+      </div>
+    </div>
+
+    <!-- Sessions Table -->
+    <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem;">My Scheduled Sessions</h2>
+    
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Tutor</th>
+            <th>Subject</th>
+            <th>Date & Time</th>
+            <th>Mode / Address</th>
+            <th>Fee</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookingsTableBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Initial sample bookings if empty
+    if (!localStorage.getItem('htf_bookings')) {
+      const sampleBookings = [
+        {
+          id: 'B-101',
+          tutorName: 'Dr. Rajesh Verma',
+          studentName: 'Aarav Sharma',
+          subject: 'Physics',
+          mode: 'Home Tuition',
+          date: '2026-11-28',
+          time: '05:30 PM - 06:30 PM',
+          address: 'Flat 402, Green Glen Layout, Bangalore',
+          rate: 700,
+          status: 'Confirmed'
+        },
+        {
+          id: 'B-102',
+          tutorName: 'Aman Kulkarni',
+          studentName: 'Aarav Sharma',
+          subject: 'Python Coding',
+          mode: 'Online',
+          date: '2026-11-30',
+          time: '04:00 PM - 05:00 PM',
+          address: 'Google Meet link sent to email',
+          rate: 800,
+          status: 'Pending'
+        }
+      ];
+      localStorage.setItem('htf_bookings', JSON.stringify(sampleBookings));
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('htf_current_user') || '{"name":"Aarav Sharma","role":"student"}');
+    document.getElementById('userName').innerText = currentUser.name;
+
+    function renderUserBookings() {
+      const bookings = JSON.parse(localStorage.getItem('htf_bookings') || '[]');
+      const tbody = document.getElementById('bookingsTableBody');
+      document.getElementById('totalBookingsCount').innerText = bookings.length;
+      tbody.innerHTML = '';
+
+      if (bookings.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No bookings scheduled yet. Click "+ Book Another Tutor" to start!</td></tr>`;
+        return;
+      }
+
+      bookings.forEach(b => {
+        const badgeColor = b.status === 'Confirmed' ? 'badge-success' : (b.status === 'Declined' ? 'badge-warning' : 'badge-primary');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${b.id}</strong></td>
+          <td>${b.tutorName}</td>
+          <td>${b.subject}</td>
+          <td>${b.date}<br><small style="color: var(--text-muted);">${b.time}</small></td>
+          <td>${b.mode === 'Home Tuition' ? '🏡 Home' : '💻 Online'}<br><small style="color: var(--text-muted);">${b.address}</small></td>
+          <td><strong>₹${b.rate}</strong></td>
+          <td><span class="badge ${badgeColor}">${b.status}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fca5a5;" onclick="cancelBooking('${b.id}')">Cancel</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function cancelBooking(id) {
+      if (confirm('Are you sure you want to cancel this booking?')) {
+        let bookings = JSON.parse(localStorage.getItem('htf_bookings') || '[]');
+        bookings = bookings.filter(b => b.id !== id);
+        localStorage.setItem('htf_bookings', JSON.stringify(bookings));
+        renderUserBookings();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('htf_current_user');
+      window.location.href = 'index.html';
+    }
+
+    renderUserBookings();
+  </script>
+</body>
+</html>
